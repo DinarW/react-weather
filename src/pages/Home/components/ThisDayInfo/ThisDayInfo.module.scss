@@ -7,7 +7,7 @@
   width: 100%;
   box-shadow: $box-shadow;
   border-radius: $border-radius;
-  background: $light-background;
+  background: var(#{--components-background-default});
 }
 
 .item {
@@ -43,7 +43,7 @@
     color: $base-color;
   }
   .indicator__value {
-    color: $light-color;
+    color: var(#{--text-color-default});
   }
 }
 

@@ -1,31 +1,40 @@
-import React from 'react'
-import GlobalSvgSelector from '../../assets/icons/global/GlobalSvgSelector';
+import React from 'react';
 import Select from 'react-select';
-
+import GlobalSvgSelector from '../../assets/icons/global/GlobalSvgSelector';
+import { Theme } from '../../context/ThemeContext';
+import { useTheme } from '../../hooks/useTheme';
 import s from './Header.module.scss';
 
-interface Props {
-  
-}
+interface Props {}
 
 const Header = (props: Props) => {
+  const theme = useTheme();
   const options = [
     { value: 'city-1', label: 'Санкт-Петербург' },
     { value: 'city-2', label: 'Москва' },
-    { value: 'city-3', label: 'Новгород' }
+    { value: 'city-3', label: 'Новгород' },
   ];
 
   const colourStyles = {
     control: (styles: any) => ({
       ...styles,
-      backgroundColor: 'rgba(71, 147, 255, 0.2)',
+      backgroundColor:
+        theme.theme === Theme.DARK ? '#4F4F4F' : 'rgba(71, 147, 255, 0.2)',
       width: '194px',
       height: '37px',
       border: 'none',
       borderRadius: '10px',
       zIndex: 100,
     }),
+    singleValue: (styles: any) => ({
+      ...styles,
+      color: theme.theme === Theme.DARK ? '#fff' : '#000',
+    }),
   };
+
+  function toggleTheme() {
+    theme.changeTheme(theme.theme === Theme.LIGHT ? Theme.DARK : Theme.LIGHT);
+  }
 
   return (
     <header className={s.header}>
@@ -33,16 +42,20 @@ const Header = (props: Props) => {
         <div className={s.logo}>
           <GlobalSvgSelector id="header-logo" />
         </div>
-        <div className={s.title}>React wheather</div>
+        <div className={s.title}>React weather</div>
       </div>
       <div className={s.wrapper}>
-        <div className={s.toggle_theme}>
+        <div className={s.toggle_theme} onClick={toggleTheme}>
           <GlobalSvgSelector id="toggle-theme" />
         </div>
-        <Select defaultValue={options[0]}styles={colourStyles} options={options} />
+        <Select
+          defaultValue={options[0]}
+          styles={colourStyles}
+          options={options}
+        />
       </div>
     </header>
   );
 };
 
-export default Header
+export default Header;
