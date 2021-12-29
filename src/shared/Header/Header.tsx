@@ -5,13 +5,16 @@ import { Theme } from '../../context/ThemeContext';
 import { useCustomDispatch } from '../../hooks/store';
 import { useTheme } from '../../hooks/useTheme';
 import { fetchCurrentWeather } from '../../store/thunks/fetchCurrentWeather';
+import { fetchWeekWeather } from '../../store/thunks/fetchWeekWeather';
 import s from './Header.module.scss';
 
 const options = [
-  { value: 'Saint Petersburg, RU', label: 'Санкт-Петербург' },
-  { value: 'Moscow', label: 'Москва' },
-  { value: 'Ufa', label: 'Уфа' },
-  { value: 'Vologda', label: 'Вологда' },
+  { value: 'Saint Petersburg, RU', label: 'Санкт-Петербург', lat: '59.94', lon: '30.31' },
+  { value: 'Moscow', label: 'Москва', lat: '55.45', lon: '37.37' },
+  { value: 'Ufa', label: 'Уфа', lat: '54.43', lon: '55.58' },
+  { value: 'Vologda', label: 'Вологда', lat: '59.13', lon: '39.53' },
+  { value: 'Buy', label: 'Буй', lat: '58.47', lon: '41.53' },
+  { value: 'Tbilisi', label: 'Тбилиси', lat: '41.69', lon: '44.83' },
 ];
 
 interface Props {}
@@ -23,6 +26,10 @@ const Header: React.FC = (props: Props) => {
 
   React.useEffect(() => {
     dispatch(fetchCurrentWeather(city));
+    const cityObj = options.find((obj) => obj.value === city);
+    if (cityObj) {
+      dispatch(fetchWeekWeather([cityObj.lat, cityObj.lon]));
+    }
   }, [dispatch, city]);
 
   const colourStyles = {

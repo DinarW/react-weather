@@ -1,11 +1,11 @@
 import React from 'react'
-import { Weather } from '../../../../store/types/types';
+import { currentWeather } from '../../../../store/types/types';
 import cloud from '../../../../assets/images/cloud.png';
 import s from './ThisDayInfo.module.scss';
 import ThisDayItem from './ThisDayItem';
 
 interface Props {
-  weather: Weather; 
+  weather: currentWeather; 
 }
 
 export interface Item {
@@ -37,17 +37,17 @@ const ThisDayInfo = ({ weather }: Props) => {
     {
       icon_id: 'pressure',
       name: 'Давление',
-      value: `${weather.main.pressure} мм ртутного столба - нормальное`,
+      value: `${weather.main.pressure} дюймов ртутного столба`,
     },
     {
       icon_id: 'precipitation',
       name: 'Осадки',
-      value: 'Без осадков',
+      value: `${weather.weather[0].description.split('').map((w, i) => i === 0 ? w.toUpperCase() : w).join('')}`,
     },
     {
       icon_id: 'wind',
       name: 'Ветер',
-      value: `${Math.round(weather.wind.speed)} м/с ${windDirection()} - легкий ветер`,
+      value: `${Math.round(weather.wind.speed)} м/с ${windDirection()}`,
     },
   ];
 

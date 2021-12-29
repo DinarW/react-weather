@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
-import { currentWeather } from '../types/types';
+import { weekWeather } from '../types/types';
 
-type CurrentWeather = {
-  weather: currentWeather;
+type WeekWeather = {
+  weather: weekWeather;
   isLoading: boolean;
   response: Response;
 };
@@ -13,22 +13,21 @@ type Response = {
   message: string;
 };
 
-const initialState: CurrentWeather = {
+const initialState: WeekWeather = {
   weather: {
-    main: {
-      temp: 0,
-      feels_like: 0,
-      pressure: 0,
-    },
-    wind: {
-      speed: 0,
-      deg: 0,
-    },
-    name: 'Saint Petersburg, RU',
-    weather: [
+    daily: [
       {
-        main: 'Clear',
-        description: 'Без осадков',
+        dt: Date.now(),
+        temp: {
+          day: 0,
+          night: 0,
+        },
+        weather: [
+          {
+            main: 'Clouds',
+            description: 'Дождилво',
+          }
+        ]
       }
     ]
   },
@@ -39,16 +38,16 @@ const initialState: CurrentWeather = {
   },
 };
 
-export const currentWeatherSlice = createSlice({
+export const weekWeatherSlice = createSlice({
   name: 'current_weather',
   initialState,
   reducers: {
-    fetchCurrentWeather(state) {
+    fetchWeekWeather(state) {
       state.isLoading = true;
     },
-    fetchCurrentWeatherSuccess(
+    fetchWeekWeatherSuccess(
       state,
-      action: PayloadAction<AxiosResponse<currentWeather>>
+      action: PayloadAction<AxiosResponse<weekWeather>>
     ) {
       state.isLoading = false;
       state.weather = action.payload.data;
@@ -57,9 +56,9 @@ export const currentWeatherSlice = createSlice({
         message: action.payload.statusText,
       };
     },
-    fetchCurrentWeatherError(
+    fetchWeekWeatherError(
       state,
-      action: PayloadAction<AxiosResponse<currentWeather>>
+      action: PayloadAction<AxiosResponse<weekWeather>>
     ) {
       state.isLoading = false;
       state.response = {
@@ -70,4 +69,4 @@ export const currentWeatherSlice = createSlice({
   },
 });
 
-export default currentWeatherSlice.reducer;
+export default weekWeatherSlice.reducer;
