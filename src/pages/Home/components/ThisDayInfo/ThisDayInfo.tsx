@@ -1,10 +1,12 @@
 import React from 'react'
-
+import { Weather } from '../../../../store/types/types';
 import cloud from '../../../../assets/images/cloud.png';
 import s from './ThisDayInfo.module.scss';
 import ThisDayItem from './ThisDayItem';
 
-interface Props {}
+interface Props {
+  weather: Weather; 
+}
 
 export interface Item {
   icon_id: string;
@@ -12,17 +14,30 @@ export interface Item {
   value: string;
 };
 
-const ThisDayInfo = (props: Props) => {
+const ThisDayInfo = ({ weather }: Props) => {
+  const windDirection = () => {
+    const directions = 
+    ['северный', 'северо-восточный', 'восточный', 'юго-восточный', 'южный', 'юго-западный', 'юго-западный', 'западный', 'северо-западный'];
+    let { deg } = weather.wind;
+    deg += 22.5;
+    if (deg < 0)
+      deg = 360 - Math.abs(deg) % 360;
+    else
+      deg = deg % 360;
+    let w = parseInt((deg / 45).toString());
+    return `${directions[w]}`;
+  };
+
   const items = [
     {
       icon_id: 'temp',
       name: 'Температура',
-      value: '20° - ощущается как 17°',
+      value: `${Math.floor(weather.main.temp)} - ощущается как ${Math.floor(weather.main.feels_like)}`,
     },
     {
       icon_id: 'pressure',
       name: 'Давление',
-      value: '765 мм ртутного столба - нормальное',
+      value: `${weather.main.pressure} мм ртутного столба - нормальное`,
     },
     {
       icon_id: 'precipitation',
@@ -32,7 +47,7 @@ const ThisDayInfo = (props: Props) => {
     {
       icon_id: 'wind',
       name: 'Ветер',
-      value: '3 м/с юго-запад - легкий ветер',
+      value: `${Math.round(weather.wind.speed)} м/с ${windDirection()} - легкий ветер`,
     },
   ];
 

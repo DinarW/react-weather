@@ -2,18 +2,28 @@ import React from 'react';
 import Select from 'react-select';
 import GlobalSvgSelector from '../../assets/icons/global/GlobalSvgSelector';
 import { Theme } from '../../context/ThemeContext';
+import { useCustomDispatch } from '../../hooks/store';
 import { useTheme } from '../../hooks/useTheme';
+import { fetchCurrentWeather } from '../../store/thunks/fetchCurrentWeather';
 import s from './Header.module.scss';
+
+const options = [
+  { value: 'Saint Petersburg, RU', label: 'Санкт-Петербург' },
+  { value: 'Moscow', label: 'Москва' },
+  { value: 'Ufa', label: 'Уфа' },
+  { value: 'Vologda', label: 'Вологда' },
+];
 
 interface Props {}
 
-const Header = (props: Props) => {
+const Header: React.FC = (props: Props) => {
+  const [city, setCity] = React.useState('Saint Petersburg, RU');
   const theme = useTheme();
-  const options = [
-    { value: 'city-1', label: 'Санкт-Петербург' },
-    { value: 'city-2', label: 'Москва' },
-    { value: 'city-3', label: 'Новгород' },
-  ];
+  const dispatch = useCustomDispatch();
+
+  React.useEffect(() => {
+    dispatch(fetchCurrentWeather(city));
+  }, [dispatch, city]);
 
   const colourStyles = {
     control: (styles: any) => ({
@@ -49,6 +59,7 @@ const Header = (props: Props) => {
           <GlobalSvgSelector id="toggle-theme" />
         </div>
         <Select
+          onChange={(e) => e?.value ? setCity(e?.value) : null}
           defaultValue={options[0]}
           styles={colourStyles}
           options={options}

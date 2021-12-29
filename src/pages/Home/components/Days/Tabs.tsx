@@ -16,6 +16,7 @@ const Tabs = (props: Props) => {
       value: 'На месяц',
     },
   ];
+
   return (
     <div className={s.tabs}>
       <div className={s.tabs__wrapper}>
